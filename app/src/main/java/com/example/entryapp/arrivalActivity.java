@@ -30,10 +30,7 @@ public class arrivalActivity extends AppCompatActivity {
         setContentView(R.layout.activity_arrival);
 
         arrival = findViewById(R.id.arrival);
-
-
-        user = new User();
-        reference= FirebaseDatabase.getInstance().getReference("Users").child(MainActivity.currentUser);
+        reference= FirebaseDatabase.getInstance().getReference("Users").child(MainActivity.currentUserKey);
 
 
         final Date date = Calendar.getInstance().getTime();

@@ -9,17 +9,27 @@ public class User {
     private String departure;
     private String place;
     private String here;
+    private String key;
 
 
     public User() {
     }
 
-    public User(String name, String arrival, String departure, String place, String here) {
+    public User(String name, String arrival, String departure, String place, String here, String key) {
         this.name = name;
         this.arrival = arrival;
         this.departure = departure;
         this.place = place;
         this.here = here;
+        this.key = key;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getName() {

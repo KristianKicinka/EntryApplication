@@ -30,7 +30,9 @@ public class MainActivity extends AppCompatActivity{
     private AutoCompleteTextView userName;
     private Button submit;
     public static String currentUser;
+    public static String currentUserKey;
     private DatabaseReference reference;
+    private DataSnapshot snapshot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +45,8 @@ public class MainActivity extends AppCompatActivity{
         submit = findViewById(R.id.arrival);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        reference= database.getReference();
-        reference.child("Users/");
-        readNames();
+        reference= database.getReference("Users");
+        readUsers();
 
 
 
@@ -57,9 +58,9 @@ public class MainActivity extends AppCompatActivity{
             public void onClick(View v) {
 
                 currentUser = userName.getText().toString();
+
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                reference= database.getReference();
-                reference.child("Users/");
+                reference= database.getReference("Users");
                 readFromDB();
 
 
@@ -75,34 +76,33 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                List<User> Users = new ArrayList<>();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    User user = new User();
-                    try {
-                        user.setName(ds.child(currentUser).getValue(User.class).getName());
-                        user.setArrival(ds.child(currentUser).getValue(User.class).getArrival());
-                        user.setDeparture(ds.child(currentUser).getValue(User.class).getDeparture());
-                        user.setHere(ds.child(currentUser).getValue(User.class).getHere());
-                        user.setPlace(ds.child(currentUser).getValue(User.class).getPlace());
-
-
-                        System.out.println("#################################");
-                        System.out.println("Daco "+user);
-                        /*Toast.makeText(getApplicationContext(), "hodnota je "+user, Toast.LENGTH_SHORT).show();*/
-                        System.out.println("#################################");
-
-                        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@  "+user.getHere());
-
-                if(user.getHere().equals("ishere")){
-                    Intent intent = new Intent(getApplicationContext(),departureActivity.class);
-                    startActivity(intent);
-                }else if(user.getHere().equals("isnothere")){
-                    Intent intent = new Intent(getApplicationContext(),arrivalActivity.class);
-                    startActivity(intent);
+                    Users.add(ds.getValue(User.class));
                 }
+                for (User user:Users) {
+                    if (user.getName().equals(currentUser)){
+
+                        try {
+                            user.setName(user.getName());
+                            user.setArrival(user.getArrival());
+                            user.setDeparture(user.getDeparture());
+                            user.setHere(user.getHere());
+                            user.setPlace(user.getPlace());
+                            currentUserKey = user.getKey();
+
+                            if(user.getHere().equals("ishere")){
+                                Intent intent = new Intent(getApplicationContext(),departureActivity.class);
+                                startActivity(intent);
+                            }else if(user.getHere().equals("isnothere")){
+                                Intent intent = new Intent(getApplicationContext(),arrivalActivity.class);
+                                startActivity(intent);
+                            }
 
 
-                    } catch (NullPointerException e) {
-                        e.printStackTrace();
+                        } catch (NullPointerException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
@@ -114,18 +114,21 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
-    public void readNames(){
+    public void readUsers(){
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<String> Users = new ArrayList<>();
+                List<String> userNames = new ArrayList<>();
                 User user = new User();
-                for (DataSnapshot ds : dataSnapshot.child("Users/").getChildren()) {
-                    Users.add(ds.getKey());
+
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    userNames.add(ds.getValue(User.class).getName());
                 }
-                ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1,Users);
+                ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1,userNames);
                 userName.setAdapter(adapter);
+
+
             }
 
             @Override
