@@ -1,5 +1,5 @@
 # EntryApplication SPSE-PO
-![logo](app/src/main/res/drawable/logospse.jpg)
+![logo](app/src/main/res/drawable/logospse.png)
 
 ## O projekte
 Android aplikácia bola vytvorená pre súkromný školský internát pri Strednej elektrotechnickej škole v Prešove na ulici Plzenská 1. 
