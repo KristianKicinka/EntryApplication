@@ -30,12 +30,12 @@
             android:layout_width="388dp"
             android:layout_height="75dp"
             android:layout_marginLeft="110dp"
-            android:completionThreshold="1"
             android:layout_marginTop="250dp"
-            android:textAlignment="center"
+            android:completionThreshold="1"
             android:ems="10"
-            android:hint="Zadajte vaše priezvisko"
-            android:inputType="textPersonName" />
+            android:hint="Zadajte vaše meno a priezvisko"
+            android:inputType="textPersonName"
+            android:textAlignment="center" />
 
         <Button
             android:id="@+id/arrival"
